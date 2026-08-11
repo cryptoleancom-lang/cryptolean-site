@@ -1,0 +1,948 @@
+# Cryptolean — metric catalogue
+
+Every chart on cryptolean.com carries the version of the metric definition
+that produced it. This file is what those versions mean. It is generated
+from the source of each metric module on every build and is never edited by
+hand, so it cannot describe a definition the site is not actually using.
+
+Format: catalog-v1. Source: src/metrics/, src/resolution/.
+23 metrics, 454 charts.
+
+## Restatement
+
+Retuning a metric rewrites every historical chart drawn with it, so each
+version records whether values already published moved:
+
+  initial    the first version. No predecessor to restate.
+  additive   new output added; no value already published changed.
+  restated   at least one value already published is different now.
+  unclear    the module does not say. Not inferred, and not guessed.
+
+A verdict is followed by the sentence from the module that produced it.
+
+
+------------------------------------------------------------------------
+## align — align-v2
+
+Putting two sources on the same calendar day.
+
+Module:   src/metrics/alignment.py
+Charts:   2
+Restated: no
+
+### Version history
+
+  align-v1  2026-08-05  [initial]
+      blockchain_com offset measured at −1 day; Binance and Yahoo at 0. Applied to cross-source charts only.
+
+  align-v2  2026-08-06  [additive]
+      sessions(), periods_per_year(), common_returns() and the crypto/benchmark symbol split. align-v1's offsets are unchanged and no existing series moves.
+      -> unchanged: "sessions(), periods_per_year(), common_returns() and the crypto/benchmark symbol split. align-v1's offsets are unchanged and no existing series moves."
+
+### Charts
+
+  /charts/btc-correlation/  Bitcoin against the Benchmarks — Correlation
+  /charts/correlation/  Cross-Asset Correlation
+
+
+------------------------------------------------------------------------
+## alt — alt-v1
+
+Alt season index — share of large alts outperforming BTC over a rolling window.
+
+Module:   src/metrics/altseason.py
+Charts:   1
+Restated: no
+
+### Version history
+
+  alt-v1  2026-08-05  [initial]
+      top-50 by basket cap, 90d cap return vs BTC, stables excluded.
+
+### Charts
+
+  /charts/altseason/  Alt Season Index
+
+
+------------------------------------------------------------------------
+## breadth — breadth-v2
+
+Market breadth and cross-asset correlation — Zone 5 category 3.
+
+Module:   src/metrics/breadth.py
+Charts:   4
+Restated: no
+
+### Version history
+
+  breadth-v1  2026-08-05  [initial]
+      share above own moving average, advance/decline ratio and cumulative line, rolling pairwise correlation.
+
+  breadth-v2  2026-08-09  [additive]
+      macro_correlation(): the rolling correlation the macro charts were computing inline. Additive — every breadth-v1 series is unchanged; the macro charts now have a version to stamp, which they previously did not and were exempted from carrying one for.
+      -> unchanged: "Additive — every breadth-v1 series is unchanged; the macro charts now have a version to stamp, which they previously did not and were exempted from carrying one for."
+
+### Charts
+
+  /charts/advance-decline/  Advances and Declines
+  /charts/breadth/  Breadth — Assets Above Their 200-Day Average
+  /charts/btc-correlation/  Bitcoin against the Benchmarks — Correlation
+  /charts/correlation/  Cross-Asset Correlation
+
+
+------------------------------------------------------------------------
+## calib — calib-v1
+
+Reliability buckets: what the market said, against what happened.
+
+Module:   src/metrics/implied.py
+Charts:   1
+Restated: no
+
+### Version history
+
+  calib-v1  2026-08-06  [initial]
+      reliability buckets over settled Kalshi contracts, one observation per market-day, distinct-market count reported beside the day count because they are not independent.
+
+### Charts
+
+  /charts/implied-vs-realised/  Were the Odds Calibrated?
+
+
+------------------------------------------------------------------------
+## cat — cat-v1
+
+Market categories — the denominator for "dispute rate by category".
+
+Module:   src/resolution/categories.py
+Charts:   6
+Restated: no
+
+### Version history
+
+  cat-v1  2026-08-05  [initial]
+      eight buckets, keyword and marker rules, first match wins.
+
+### Charts
+
+  /charts/crypto-odds-board/  Crypto Event Odds
+  /charts/dispute-rate/  Dispute Rate by Market Category
+  /charts/disputed-volume/  Disputed Volume Over Time
+  /charts/event-risk-calendar/  Event-Risk Calendar
+  /charts/implied-vs-realised/  Were the Odds Calibrated?
+  /charts/repeat-disputes/  Repeat-Dispute Leaderboard
+
+
+------------------------------------------------------------------------
+## cycle — cycle-v5
+
+Cycle and ROI comparison — CHART_LIBRARY.md §3.4.
+
+Module:   src/metrics/cycles.py
+Charts:   113
+Restated: no
+
+### Version history
+
+  cycle-v1  2026-08-05  [initial]
+      drawdown, anchored ROI, monthly return grid.
+
+  cycle-v2  2026-08-05  [additive]
+      calendar-year returns, rolling ROI, run streaks, days since a decline, DCA-by-weekday. cycle-v1's series are untouched: no existing chart moves.
+      -> unchanged: "calendar-year returns, rolling ROI, run streaks, days since a decline, DCA-by-weekday. cycle-v1's series are untouched: no existing chart moves."
+
+  cycle-v3  2026-08-06  [additive]
+      seasonal_ytd() and milestones(). Additive again — every v1 and v2 series is unchanged and only the stamp moves.
+      -> unchanged: "Additive again — every v1 and v2 series is unchanged and only the stamp moves."
+
+  cycle-v4  2026-08-06  [additive]
+      drawdown_episodes(): peak, trough, depth and recovery time, DERIVED per asset instead of hand-dated. Additive; the hand-dated CYCLE_BOTTOMS are untouched and every chart built on them is unchanged.
+      -> unchanged: "Additive; the hand-dated CYCLE_BOTTOMS are untouched and every chart built on them is unchanged."
+
+  cycle-v5  2026-08-06  [additive]
+      seasonal cohorts and the mean +/- n*sigma envelope the payload's `standard-deviation: cohort` control needs. seasonal_envelope() gains columns; nothing it already returned changed, so no drawn series moves.
+      -> unchanged: "seasonal cohorts and the mean +/- n*sigma envelope the payload's `standard-deviation: cohort` control needs. seasonal_envelope() gains columns; nothing it already returned changed, so no drawn series moves."
+
+### Charts
+
+  /charts/days-since-decline-ada/  Cardano — Days Since a Decline
+  /charts/days-since-decline-avax/  Avalanche — Days Since a Decline
+  /charts/days-since-decline-bch/  Bitcoin Cash — Days Since a Decline
+  /charts/days-since-decline-dot/  Polkadot — Days Since a Decline
+  /charts/days-since-decline-eth/  Ethereum — Days Since a Decline
+  /charts/days-since-decline-gold/  Gold — Days Since a Decline
+  /charts/days-since-decline-link/  Chainlink — Days Since a Decline
+  /charts/days-since-decline-ltc/  Litecoin — Days Since a Decline
+  /charts/days-since-decline-pol/  Polygon — Days Since a Decline
+  /charts/days-since-decline-silver/  Silver — Days Since a Decline
+  /charts/days-since-decline-sol/  Solana — Days Since a Decline
+  /charts/days-since-decline-spx/  S&P 500 — Days Since a Decline
+  /charts/days-since-decline-xrp/  XRP — Days Since a Decline
+  /charts/dayssince-btc/  Bitcoin — Days Since a Decline
+  /charts/dca-btc/  Bitcoin — Best Day of the Week to Buy
+  /charts/dca-weekday-ada/  Cardano — Best Day of the Week to Buy
+  /charts/dca-weekday-avax/  Avalanche — Best Day of the Week to Buy
+  /charts/dca-weekday-bch/  Bitcoin Cash — Best Day of the Week to Buy
+  /charts/dca-weekday-dot/  Polkadot — Best Day of the Week to Buy
+  /charts/dca-weekday-eth/  Ethereum — Best Day of the Week to Buy
+  /charts/dca-weekday-gold/  Gold — Best Day of the Week to Buy
+  /charts/dca-weekday-link/  Chainlink — Best Day of the Week to Buy
+  /charts/dca-weekday-ltc/  Litecoin — Best Day of the Week to Buy
+  /charts/dca-weekday-pol/  Polygon — Best Day of the Week to Buy
+  /charts/dca-weekday-silver/  Silver — Best Day of the Week to Buy
+  /charts/dca-weekday-sol/  Solana — Best Day of the Week to Buy
+  /charts/dca-weekday-spx/  S&P 500 — Best Day of the Week to Buy
+  /charts/dca-weekday-xrp/  XRP — Best Day of the Week to Buy
+  /charts/drawdown-ada/  Cardano — Drawdown from All-Time High
+  /charts/drawdown-avax/  Avalanche — Drawdown from All-Time High
+  /charts/drawdown-bch/  Bitcoin Cash — Drawdown from All-Time High
+  /charts/drawdown-btc/  Bitcoin — Drawdown from All-Time High
+  /charts/drawdown-dot/  Polkadot — Drawdown from All-Time High
+  /charts/drawdown-eth/  Ethereum — Drawdown from All-Time High
+  /charts/drawdown-gold/  Gold — Drawdown from All-Time High
+  /charts/drawdown-link/  Chainlink — Drawdown from All-Time High
+  /charts/drawdown-ltc/  Litecoin — Drawdown from All-Time High
+  /charts/drawdown-pol/  Polygon — Drawdown from All-Time High
+  /charts/drawdown-silver/  Silver — Drawdown from All-Time High
+  /charts/drawdown-sol/  Solana — Drawdown from All-Time High
+  /charts/drawdown-spx/  S&P 500 — Drawdown from All-Time High
+  /charts/drawdown-xrp/  XRP — Drawdown from All-Time High
+  /charts/monthly-btc/  Bitcoin — Monthly Returns
+  /charts/monthly-returns-ada/  Cardano — Monthly Returns
+  /charts/monthly-returns-avax/  Avalanche — Monthly Returns
+  /charts/monthly-returns-bch/  Bitcoin Cash — Monthly Returns
+  /charts/monthly-returns-dot/  Polkadot — Monthly Returns
+  /charts/monthly-returns-eth/  Ethereum — Monthly Returns
+  /charts/monthly-returns-gold/  Gold — Monthly Returns
+  /charts/monthly-returns-link/  Chainlink — Monthly Returns
+  /charts/monthly-returns-ltc/  Litecoin — Monthly Returns
+  /charts/monthly-returns-pol/  Polygon — Monthly Returns
+  /charts/monthly-returns-silver/  Silver — Monthly Returns
+  /charts/monthly-returns-sol/  Solana — Monthly Returns
+  /charts/monthly-returns-spx/  S&P 500 — Monthly Returns
+  /charts/monthly-returns-xrp/  XRP — Monthly Returns
+  /charts/return-streaks-ada/  Cardano — Consecutive Up and Down Closes
+  /charts/return-streaks-avax/  Avalanche — Consecutive Up and Down Closes
+  /charts/return-streaks-bch/  Bitcoin Cash — Consecutive Up and Down Closes
+  /charts/return-streaks-dot/  Polkadot — Consecutive Up and Down Closes
+  /charts/return-streaks-eth/  Ethereum — Consecutive Up and Down Closes
+  /charts/return-streaks-gold/  Gold — Consecutive Up and Down Closes
+  /charts/return-streaks-link/  Chainlink — Consecutive Up and Down Closes
+  /charts/return-streaks-ltc/  Litecoin — Consecutive Up and Down Closes
+  /charts/return-streaks-pol/  Polygon — Consecutive Up and Down Closes
+  /charts/return-streaks-silver/  Silver — Consecutive Up and Down Closes
+  /charts/return-streaks-sol/  Solana — Consecutive Up and Down Closes
+  /charts/return-streaks-spx/  S&P 500 — Consecutive Up and Down Closes
+  /charts/return-streaks-xrp/  XRP — Consecutive Up and Down Closes
+  /charts/roihalving-btc/  Bitcoin — Return After Each Halving
+  /charts/rolling-btc/  Bitcoin — Rolling Holding-Period Returns
+  /charts/rolling-returns-ada/  Cardano — Rolling Holding-Period Returns
+  /charts/rolling-returns-avax/  Avalanche — Rolling Holding-Period Returns
+  /charts/rolling-returns-bch/  Bitcoin Cash — Rolling Holding-Period Returns
+  /charts/rolling-returns-dot/  Polkadot — Rolling Holding-Period Returns
+  /charts/rolling-returns-eth/  Ethereum — Rolling Holding-Period Returns
+  /charts/rolling-returns-gold/  Gold — Rolling Holding-Period Returns
+  /charts/rolling-returns-link/  Chainlink — Rolling Holding-Period Returns
+  /charts/rolling-returns-ltc/  Litecoin — Rolling Holding-Period Returns
+  /charts/rolling-returns-pol/  Polygon — Rolling Holding-Period Returns
+  /charts/rolling-returns-silver/  Silver — Rolling Holding-Period Returns
+  /charts/rolling-returns-sol/  Solana — Rolling Holding-Period Returns
+  /charts/rolling-returns-spx/  S&P 500 — Rolling Holding-Period Returns
+  /charts/rolling-returns-xrp/  XRP — Rolling Holding-Period Returns
+  /charts/seasonality-ada/  Cardano — Year-to-Date by Month
+  /charts/seasonality-avax/  Avalanche — Year-to-Date by Month
+  /charts/seasonality-bch/  Bitcoin Cash — Year-to-Date by Month
+  /charts/seasonality-btc/  Bitcoin — Year-to-Date by Month
+  /charts/seasonality-dot/  Polkadot — Year-to-Date by Month
+  /charts/seasonality-eth/  Ethereum — Year-to-Date by Month
+  /charts/seasonality-gold/  Gold — Year-to-Date by Month
+  /charts/seasonality-link/  Chainlink — Year-to-Date by Month
+  /charts/seasonality-ltc/  Litecoin — Year-to-Date by Month
+  /charts/seasonality-pol/  Polygon — Year-to-Date by Month
+  /charts/seasonality-silver/  Silver — Year-to-Date by Month
+  /charts/seasonality-sol/  Solana — Year-to-Date by Month
+  /charts/seasonality-spx/  S&P 500 — Year-to-Date by Month
+  /charts/seasonality-xrp/  XRP — Year-to-Date by Month
+  /charts/streaks-btc/  Bitcoin — Consecutive Up and Down Closes
+  /charts/yearly-btc/  Bitcoin — Returns by Calendar Year
+  /charts/yearly-returns-ada/  Cardano — Returns by Calendar Year
+  /charts/yearly-returns-avax/  Avalanche — Returns by Calendar Year
+  /charts/yearly-returns-bch/  Bitcoin Cash — Returns by Calendar Year
+  /charts/yearly-returns-dot/  Polkadot — Returns by Calendar Year
+  /charts/yearly-returns-eth/  Ethereum — Returns by Calendar Year
+  /charts/yearly-returns-gold/  Gold — Returns by Calendar Year
+  /charts/yearly-returns-link/  Chainlink — Returns by Calendar Year
+  /charts/yearly-returns-ltc/  Litecoin — Returns by Calendar Year
+  /charts/yearly-returns-pol/  Polygon — Returns by Calendar Year
+  /charts/yearly-returns-silver/  Silver — Returns by Calendar Year
+  /charts/yearly-returns-sol/  Solana — Returns by Calendar Year
+  /charts/yearly-returns-spx/  S&P 500 — Returns by Calendar Year
+  /charts/yearly-returns-xrp/  XRP — Returns by Calendar Year
+
+
+------------------------------------------------------------------------
+## cycleroi — cycleroi-v2
+
+Cycle-anchored ROI, and every variant its controls switch between.
+
+Module:   src/metrics/cycleroi.py
+Charts:   10
+Restated: no
+
+### Version history
+
+  cycleroi-v1  2026-08-09  [initial]
+      alternation anchors, the three window lengths, the 2021-peak toggle and the merged-cycle variant.
+
+  cycleroi-v2  2026-08-09  [unclear]
+      merged cycles now cross the removed intermediate boundary instead of merely hiding its series.
+
+### Charts
+
+  /charts/roi-after-bottom-ada/  Cardano — Return After Each Cycle Bottom
+  /charts/roi-after-bottom-eth/  Ethereum — Return After Each Cycle Bottom
+  /charts/roi-after-bottom-ltc/  Litecoin — Return After Each Cycle Bottom
+  /charts/roi-after-bottom-xrp/  XRP — Return After Each Cycle Bottom
+  /charts/roi-after-peak-ada/  Cardano — Return After Each Cycle Peak
+  /charts/roi-after-peak-eth/  Ethereum — Return After Each Cycle Peak
+  /charts/roi-after-peak-ltc/  Litecoin — Return After Each Cycle Peak
+  /charts/roi-after-peak-xrp/  XRP — Return After Each Cycle Peak
+  /charts/roibottom-btc/  Bitcoin — Return After Each Cycle Bottom
+  /charts/roipeak-btc/  Bitcoin — Return After Each Cycle Peak
+
+
+------------------------------------------------------------------------
+## dom — dom-v1
+
+Dominance — share of a defined basket, not of "the total crypto market cap".
+
+Module:   src/metrics/dominance.py
+Charts:   3
+Restated: no
+
+### Version history
+
+  dom-v1  2026-08-05  [initial]
+      CapMrktEstUSD basket, 2019-01-01 onward.
+
+### Charts
+
+  /charts/dominance/  Market Structure — share of the Cryptolean basket
+  /charts/logreg-total/  Cryptolean Basket — Logarithmic Regression
+  /charts/others-dominance/  Dominance of Everything Outside the Top 10
+
+
+------------------------------------------------------------------------
+## flags — flags-v2
+
+Phase 4 — the flag taxonomy. This is the product, not the plumbing.
+
+Module:   src/resolution/flags.py
+Charts:   6
+Restated: yes
+
+### Version history
+
+  flags-v1  2026-08-05  [initial]
+      subjective wording, missing source, timezone, edge-case coverage, dispute history. Substring matching.
+
+  flags-v2  2026-08-05  [restated]
+      word-boundary matching with explicit stems. Scores move; see PHASE4_THRESHOLDS.md for the before/after distribution and for which flags survive a volume control. Weights are UNCHANGED and deliberately so — see DEFAULT_WEIGHTS.
+      -> moved: "Scores move; see PHASE4_THRESHOLDS.md for the before/after distribution and for which flags survive a volume control."
+      -> unchanged: "Weights are UNCHANGED and deliberately so — see DEFAULT_WEIGHTS."
+
+### Charts
+
+  /charts/crypto-odds-board/  Crypto Event Odds
+  /charts/dispute-rate/  Dispute Rate by Market Category
+  /charts/disputed-volume/  Disputed Volume Over Time
+  /charts/event-risk-calendar/  Event-Risk Calendar
+  /charts/implied-vs-realised/  Were the Odds Calibrated?
+  /charts/repeat-disputes/  Repeat-Dispute Leaderboard
+
+
+------------------------------------------------------------------------
+## implied — implied-v1
+
+Market-implied probabilities from Kalshi candles.
+
+Module:   src/metrics/implied.py
+Charts:   5
+Restated: no
+
+### Version history
+
+  implied-v1  2026-08-05  [initial]
+      outcome panels from daily candles, raw sum reported.
+
+### Charts
+
+  /charts/crypto-odds-board/  Crypto Event Odds
+  /charts/easing-scatter/  Easing Odds against Bitcoin Risk
+  /charts/event-risk-calendar/  Event-Risk Calendar
+  /charts/fed-path/  Bitcoin Risk vs the Market-Implied Fed Path
+  /charts/implied-vs-realised/  Were the Odds Calibrated?
+
+
+------------------------------------------------------------------------
+## issuance — issuance-v1
+
+Bitcoin issuance transformations.
+
+Module:   src/metrics/issuance.py
+Charts:   1
+Restated: no
+
+### Version history
+
+  issuance-v1  2026-08-08  [initial]
+      Exact one-calendar-day change in cumulative bitcoin issuance. Missing comparison dates stay missing; no positional shift, interpolation or averaging. The source's final observed calendar day is always omitted because it may be an incomplete UTC day.
+
+### Charts
+
+  /charts/new-supply-btc/  Bitcoin: New Supply
+
+
+------------------------------------------------------------------------
+## latency — latency-v1
+
+Settlement latency — how long a venue takes to pay out after the question is answered.
+
+Module:   src/resolution/latency.py
+Charts:   4
+Restated: no
+
+### Version history
+
+  latency-v1  2026-08-05  [initial]
+      close_time -> settlement_time, signed, three populations, censoring counted not dropped.
+
+### Charts
+
+  /charts/latency-by-category/  Settlement Latency by Category
+  /charts/latency-vs-volume/  Settlement Latency against Market Size
+  /charts/settlement-latency/  Settlement Latency by Venue
+  /charts/slowest-settlements/  Slowest Settlements
+
+
+------------------------------------------------------------------------
+## logreg — logreg-v2
+
+Logarithmic regression — fit log(price) against log(days since genesis).
+
+Module:   src/metrics/logreg.py
+Charts:   44
+Restated: no
+
+### Version history
+
+  logreg-v1  2026-08-05  [initial]
+      expanding OLS on (log t, log price), residual-sigma bands.
+
+  logreg-v2  2026-08-06  [additive]
+      `project()` added for the projected-x chart shape. Purely additive: compute(), residual() and bands() are byte-for-byte the v1 definitions and every historical value is unchanged. Only the stamp moves.
+      -> unchanged: "Purely additive: compute(), residual() and bands() are byte-for-byte the v1 definitions and every historical value is unchanged."
+      -> unchanged: "Only the stamp moves."
+
+### Charts
+
+  /charts/fan-btc/  Bitcoin — Asymmetric Quantile Fan
+  /charts/log-regression-ada/  Cardano — Logarithmic Regression
+  /charts/log-regression-avax/  Avalanche — Logarithmic Regression
+  /charts/log-regression-bch/  Bitcoin Cash — Logarithmic Regression
+  /charts/log-regression-dot/  Polkadot — Logarithmic Regression
+  /charts/log-regression-eth/  Ethereum — Logarithmic Regression
+  /charts/log-regression-link/  Chainlink — Logarithmic Regression
+  /charts/log-regression-ltc/  Litecoin — Logarithmic Regression
+  /charts/log-regression-pol/  Polygon — Logarithmic Regression
+  /charts/log-regression-sol/  Solana — Logarithmic Regression
+  /charts/log-regression-xrp/  XRP — Logarithmic Regression
+  /charts/logreg-btc/  Bitcoin — Logarithmic Regression
+  /charts/logreg-oscillator-ada/  Cardano — Distance from Log Regression
+  /charts/logreg-oscillator-avax/  Avalanche — Distance from Log Regression
+  /charts/logreg-oscillator-bch/  Bitcoin Cash — Distance from Log Regression
+  /charts/logreg-oscillator-dot/  Polkadot — Distance from Log Regression
+  /charts/logreg-oscillator-eth/  Ethereum — Distance from Log Regression
+  /charts/logreg-oscillator-link/  Chainlink — Distance from Log Regression
+  /charts/logreg-oscillator-ltc/  Litecoin — Distance from Log Regression
+  /charts/logreg-oscillator-pol/  Polygon — Distance from Log Regression
+  /charts/logreg-oscillator-sol/  Solana — Distance from Log Regression
+  /charts/logreg-oscillator-xrp/  XRP — Distance from Log Regression
+  /charts/logregosc-btc/  Bitcoin — Distance from Log Regression
+  /charts/quantile-fan-ada/  Cardano — Asymmetric Quantile Fan
+  /charts/quantile-fan-avax/  Avalanche — Asymmetric Quantile Fan
+  /charts/quantile-fan-bch/  Bitcoin Cash — Asymmetric Quantile Fan
+  /charts/quantile-fan-dot/  Polkadot — Asymmetric Quantile Fan
+  /charts/quantile-fan-eth/  Ethereum — Asymmetric Quantile Fan
+  /charts/quantile-fan-link/  Chainlink — Asymmetric Quantile Fan
+  /charts/quantile-fan-ltc/  Litecoin — Asymmetric Quantile Fan
+  /charts/quantile-fan-pol/  Polygon — Asymmetric Quantile Fan
+  /charts/quantile-fan-sol/  Solana — Asymmetric Quantile Fan
+  /charts/quantile-fan-xrp/  XRP — Asymmetric Quantile Fan
+  /charts/rainbow-ada/  Cardano — Rainbow Chart
+  /charts/rainbow-avax/  Avalanche — Rainbow Chart
+  /charts/rainbow-bch/  Bitcoin Cash — Rainbow Chart
+  /charts/rainbow-btc/  Bitcoin — Rainbow Chart
+  /charts/rainbow-dot/  Polkadot — Rainbow Chart
+  /charts/rainbow-eth/  Ethereum — Rainbow Chart
+  /charts/rainbow-link/  Chainlink — Rainbow Chart
+  /charts/rainbow-ltc/  Litecoin — Rainbow Chart
+  /charts/rainbow-pol/  Polygon — Rainbow Chart
+  /charts/rainbow-sol/  Solana — Rainbow Chart
+  /charts/rainbow-xrp/  XRP — Rainbow Chart
+
+
+------------------------------------------------------------------------
+## match — match-v3
+
+Phase 4 step 3 — candidate generation for cross-venue matching.
+
+Module:   src/resolution/matching.py
+Charts:   0
+Restated: no
+
+### Version history
+
+  match-v1  2026-08-05  [initial]
+      TF-IDF cosine candidates, unverified by construction.
+
+  match-v2  2026-08-05  [unclear]
+      Words and numbers separated. v1 tokenised on [a-z0-9']+, so "$4.07" became {4, 07} and "2026-07-07" became {2026, 07}. Rare digit fragments earn high IDF, so a question scored against an unrelated one purely on a shared "07" — "Will average gas prices be above $4.07?" matched "Will Argentina win on 2026-07-07?" at 0.71, above genuine same-event pairs. Numbers now carry no similarity weight; instead, two questions that both quote thresholds but share none are penalised, because "above $4.07" and "above $4.04" are different markets.
+
+  match-v3  2026-08-05  [unclear]
+      Dates stripped before numbers are read. v2 still let a date's parts become thresholds: "2026-07-05" gave 7 and 5, which then AGREED with an inflation question about 5.00% and cancelled the very penalty meant to separate them — "inflation in Brazil above 5.00%" scored 0.709 against "Will Brazil win on 2026-07-05?". Years are still read from the original text, because a year inside a date is exactly the deadline worth comparing.
+
+
+------------------------------------------------------------------------
+## resdb — resdb-v2
+
+Phase 4 — the resolution database. Four tables, one per RESOLUTION_DB's design.
+
+Module:   src/resolution/schema.py
+Charts:   3
+Restated: no
+
+### Version history
+
+  resdb-v1  2026-08-05  [initial]
+      markets + resolutions + candidate links + single-venue flags.
+
+  resdb-v2  2026-08-05  [unclear]
+      `settlement_time` added — when a contract ACTUALLY settled, which on Kalshi is not `expiry_time`. See below.
+
+### Charts
+
+  /charts/dispute-rate/  Dispute Rate by Market Category
+  /charts/disputed-volume/  Disputed Volume Over Time
+  /charts/repeat-disputes/  Repeat-Dispute Leaderboard
+
+
+------------------------------------------------------------------------
+## resrisk — resrisk-v2
+
+Resolution risk as a metric module — the locked contract, plus the evidence.
+
+Module:   src/resolution/risk_score.py
+Charts:   3
+Restated: yes
+
+### Version history
+
+  resrisk-v1  2026-08-05  [initial]
+      wraps flags-v1's taxonomy and weights; adds clause extraction, absence basis, and the record basis for dispute history. Score values identical to flags-v1 — this version adds evidence, it does not re-tune.
+
+  resrisk-v2  2026-08-05  [restated]
+      follows flags-v2's word-boundary matching. SCORES MOVE, but narrowly: 4.2% of the corpus changes, mean 0.3263 -> 0.3289, rank correlation 0.995. The change is a matching fix — flags-v1's "tie" matched "parties" and credited 2,434 markets with edge-case coverage they never had. Weights unchanged. PHASE4_THRESHOLDS.md records the before/after and which flags survive a volume control. Evidence spans now come from flags.find(), the same matcher that scores, so a quoted clause cannot disagree with the number.
+      -> moved: "SCORES MOVE, but narrowly: 4.2% of the corpus changes, mean 0.3263 -> 0.3289, rank correlation 0.995."
+      -> unchanged: "Weights unchanged."
+
+### Charts
+
+  /charts/dispute-rate/  Dispute Rate by Market Category
+  /charts/disputed-volume/  Disputed Volume Over Time
+  /charts/repeat-disputes/  Repeat-Dispute Leaderboard
+
+
+------------------------------------------------------------------------
+## risk — risk-v1
+
+Risk metric — reconstruction, not a clone.
+
+Module:   src/metrics/risk.py
+Charts:   48
+Restated: no
+
+### Version history
+
+  risk-v1  2026-08-05  [initial]
+      f=0.395, ma=365d. Phase 0 gate: 6/6 on cycle-risk extremes. Deliberately not retuned to 0.625 to force the Apr-2021 price-date reading. See PHASE0_RESULT.md.
+
+  (no version bump)  2026-08-05  [additive]
+      SMOOTHING_DAYS=14 added as a display constant. compute() output UNCHANGED — the six pinned numbers do not move.
+      -> unchanged: "SMOOTHING_DAYS=14 added as a display constant. compute() output UNCHANGED — the six pinned numbers do not move."
+
+### Charts
+
+  /charts/bubble-btc/  Bitcoin — Short Term Bubble Risk
+  /charts/bubble-risk-ada/  Cardano — Short Term Bubble Risk
+  /charts/bubble-risk-avax/  Avalanche — Short Term Bubble Risk
+  /charts/bubble-risk-bch/  Bitcoin Cash — Short Term Bubble Risk
+  /charts/bubble-risk-dot/  Polkadot — Short Term Bubble Risk
+  /charts/bubble-risk-eth/  Ethereum — Short Term Bubble Risk
+  /charts/bubble-risk-gold/  Gold — Short Term Bubble Risk
+  /charts/bubble-risk-link/  Chainlink — Short Term Bubble Risk
+  /charts/bubble-risk-ltc/  Litecoin — Short Term Bubble Risk
+  /charts/bubble-risk-pol/  Polygon — Short Term Bubble Risk
+  /charts/bubble-risk-silver/  Silver — Short Term Bubble Risk
+  /charts/bubble-risk-sol/  Solana — Short Term Bubble Risk
+  /charts/bubble-risk-spx/  S&P 500 — Short Term Bubble Risk
+  /charts/bubble-risk-xrp/  XRP — Short Term Bubble Risk
+  /charts/m2-growth/  Money Supply Growth vs Bitcoin Risk
+  /charts/macro-tightening/  Macro Tightening Composite vs Bitcoin Risk
+  /charts/nfci/  Financial Conditions vs Bitcoin Risk
+  /charts/risk-alts-btc/  Risk on BTC Pairs
+  /charts/risk-alts-usd/  Risk on the Majors
+  /charts/risk-btc/  Bitcoin — Historical Risk Levels
+  /charts/risk-heatmap/  Risk Heatmap — all tracked assets
+  /charts/risk-levels-ada/  Cardano — Historical Risk Levels
+  /charts/risk-levels-avax/  Avalanche — Historical Risk Levels
+  /charts/risk-levels-bch/  Bitcoin Cash — Historical Risk Levels
+  /charts/risk-levels-dot/  Polkadot — Historical Risk Levels
+  /charts/risk-levels-eth/  Ethereum — Historical Risk Levels
+  /charts/risk-levels-gold/  Gold — Historical Risk Levels
+  /charts/risk-levels-link/  Chainlink — Historical Risk Levels
+  /charts/risk-levels-ltc/  Litecoin — Historical Risk Levels
+  /charts/risk-levels-pol/  Polygon — Historical Risk Levels
+  /charts/risk-levels-silver/  Silver — Historical Risk Levels
+  /charts/risk-levels-sol/  Solana — Historical Risk Levels
+  /charts/risk-levels-spx/  S&P 500 — Historical Risk Levels
+  /charts/risk-levels-xrp/  XRP — Historical Risk Levels
+  /charts/time-in-bands-ada/  Cardano — Time in Risk Bands
+  /charts/time-in-bands-avax/  Avalanche — Time in Risk Bands
+  /charts/time-in-bands-bch/  Bitcoin Cash — Time in Risk Bands
+  /charts/time-in-bands-dot/  Polkadot — Time in Risk Bands
+  /charts/time-in-bands-eth/  Ethereum — Time in Risk Bands
+  /charts/time-in-bands-gold/  Gold — Time in Risk Bands
+  /charts/time-in-bands-link/  Chainlink — Time in Risk Bands
+  /charts/time-in-bands-ltc/  Litecoin — Time in Risk Bands
+  /charts/time-in-bands-pol/  Polygon — Time in Risk Bands
+  /charts/time-in-bands-silver/  Silver — Time in Risk Bands
+  /charts/time-in-bands-sol/  Solana — Time in Risk Bands
+  /charts/time-in-bands-spx/  S&P 500 — Time in Risk Bands
+  /charts/time-in-bands-xrp/  XRP — Time in Risk Bands
+  /charts/timeinbands-btc/  Bitcoin — Time in Risk Bands
+
+
+------------------------------------------------------------------------
+## riskstat — riskstat-v1
+
+Statistics *about* the risk metric — SPEC.md Zone 5 category 1.
+
+Module:   src/metrics/riskstats.py
+Charts:   15
+Restated: no
+
+### Version history
+
+  riskstat-v1  2026-08-05  [initial]
+      forward returns by risk decile, band excursions, lookahead gap against global normalisation.
+
+### Charts
+
+  /charts/forward-returns-ada/  Cardano — Forward Returns by Risk Level
+  /charts/forward-returns-avax/  Avalanche — Forward Returns by Risk Level
+  /charts/forward-returns-bch/  Bitcoin Cash — Forward Returns by Risk Level
+  /charts/forward-returns-dot/  Polkadot — Forward Returns by Risk Level
+  /charts/forward-returns-eth/  Ethereum — Forward Returns by Risk Level
+  /charts/forward-returns-gold/  Gold — Forward Returns by Risk Level
+  /charts/forward-returns-link/  Chainlink — Forward Returns by Risk Level
+  /charts/forward-returns-ltc/  Litecoin — Forward Returns by Risk Level
+  /charts/forward-returns-pol/  Polygon — Forward Returns by Risk Level
+  /charts/forward-returns-silver/  Silver — Forward Returns by Risk Level
+  /charts/forward-returns-sol/  Solana — Forward Returns by Risk Level
+  /charts/forward-returns-spx/  S&P 500 — Forward Returns by Risk Level
+  /charts/forward-returns-xrp/  XRP — Forward Returns by Risk Level
+  /charts/fwdret-btc/  Bitcoin — Forward Returns by Risk Level
+  /charts/lookahead-btc/  Bitcoin — What Lookahead Normalisation Costs
+
+
+------------------------------------------------------------------------
+## stable — stable-v1
+
+Stablecoin supply transformations.
+
+Module:   src/metrics/stablecoins.py
+Charts:   1
+Restated: no
+
+### Version history
+
+  stable-v1  2026-08-08  [initial]
+      Exact calendar-day net change in the DefiLlama totalCirculatingUSD.peggedUSD aggregate. Missing comparison dates stay missing; no positional shift, interpolation or forward fill.
+
+### Charts
+
+  /charts/stablecoin-net-issuance-30d/  Stablecoin Net Issuance (30d)
+
+
+------------------------------------------------------------------------
+## tech — tech-v5
+
+Technical indicators — CHART_LIBRARY.md §3.5.
+
+Module:   src/metrics/technicals.py
+Charts:   134
+Restated: yes
+
+### Version history
+
+  tech-v1  2026-08-05  [initial]
+      moving averages, bull market support band, Pi Cycle, Mayer multiple, RSI.
+
+  tech-v2  2026-08-05  [additive]
+      MACD, Bollinger bands, MA crossings, realised volatility, MA ribbon strength. Nothing in tech-v1 was redefined — every existing series is unchanged and no historical chart moves.
+      -> unchanged: "Nothing in tech-v1 was redefined — every existing series is unchanged and no historical chart moves."
+
+  tech-v3  2026-08-06  [restated]
+      realised_volatility() takes the annualiser as a parameter instead of hardcoding 365. The default is still 365, so every crypto series is unchanged to the last digit. Benchmarks on a five-day calendar were reading about 18% low and now do not.
+      -> moved: "Benchmarks on a five-day calendar were reading about 18% low and now do not."
+      -> unchanged: "The default is still 365, so every crypto series is unchanged to the last digit."
+
+  tech-v4  2026-08-06  [additive]
+      Donchian channel and a close-only stochastic. Additive; nothing earlier is redefined.
+      -> unchanged: "Additive; nothing earlier is redefined."
+
+  tech-v5  2026-08-07  [additive]
+      Exponential moving-average overlays. Additive; SMA and every existing indicator are unchanged.
+      -> unchanged: "Additive;"
+      -> unchanged: "SMA and every existing indicator are unchanged."
+
+### Charts
+
+  /charts/bmsb-btc/  Bitcoin — Bull Market Support Band
+  /charts/bollinger-ada/  Cardano — Bollinger Bands
+  /charts/bollinger-avax/  Avalanche — Bollinger Bands
+  /charts/bollinger-bch/  Bitcoin Cash — Bollinger Bands
+  /charts/bollinger-btc/  Bitcoin — Bollinger Bands
+  /charts/bollinger-dot/  Polkadot — Bollinger Bands
+  /charts/bollinger-eth/  Ethereum — Bollinger Bands
+  /charts/bollinger-gold/  Gold — Bollinger Bands
+  /charts/bollinger-link/  Chainlink — Bollinger Bands
+  /charts/bollinger-ltc/  Litecoin — Bollinger Bands
+  /charts/bollinger-pol/  Polygon — Bollinger Bands
+  /charts/bollinger-silver/  Silver — Bollinger Bands
+  /charts/bollinger-sol/  Solana — Bollinger Bands
+  /charts/bollinger-spx/  S&P 500 — Bollinger Bands
+  /charts/bollinger-xrp/  XRP — Bollinger Bands
+  /charts/ma-btc/  Bitcoin — Long Term Moving Averages
+  /charts/ma-crosses-ada/  Cardano — Golden and Death Crosses
+  /charts/ma-crosses-avax/  Avalanche — Golden and Death Crosses
+  /charts/ma-crosses-bch/  Bitcoin Cash — Golden and Death Crosses
+  /charts/ma-crosses-dot/  Polkadot — Golden and Death Crosses
+  /charts/ma-crosses-eth/  Ethereum — Golden and Death Crosses
+  /charts/ma-crosses-link/  Chainlink — Golden and Death Crosses
+  /charts/ma-crosses-ltc/  Litecoin — Golden and Death Crosses
+  /charts/ma-crosses-pol/  Polygon — Golden and Death Crosses
+  /charts/ma-crosses-sol/  Solana — Golden and Death Crosses
+  /charts/ma-crosses-xrp/  XRP — Golden and Death Crosses
+  /charts/ma-ribbon-ada/  Cardano — Moving Average Ribbon
+  /charts/ma-ribbon-avax/  Avalanche — Moving Average Ribbon
+  /charts/ma-ribbon-bch/  Bitcoin Cash — Moving Average Ribbon
+  /charts/ma-ribbon-dot/  Polkadot — Moving Average Ribbon
+  /charts/ma-ribbon-eth/  Ethereum — Moving Average Ribbon
+  /charts/ma-ribbon-gold/  Gold — Moving Average Ribbon
+  /charts/ma-ribbon-link/  Chainlink — Moving Average Ribbon
+  /charts/ma-ribbon-ltc/  Litecoin — Moving Average Ribbon
+  /charts/ma-ribbon-pol/  Polygon — Moving Average Ribbon
+  /charts/ma-ribbon-silver/  Silver — Moving Average Ribbon
+  /charts/ma-ribbon-sol/  Solana — Moving Average Ribbon
+  /charts/ma-ribbon-spx/  S&P 500 — Moving Average Ribbon
+  /charts/ma-ribbon-xrp/  XRP — Moving Average Ribbon
+  /charts/macd-ada/  Cardano — MACD
+  /charts/macd-avax/  Avalanche — MACD
+  /charts/macd-bch/  Bitcoin Cash — MACD
+  /charts/macd-btc/  Bitcoin — MACD
+  /charts/macd-dot/  Polkadot — MACD
+  /charts/macd-eth/  Ethereum — MACD
+  /charts/macd-gold/  Gold — MACD
+  /charts/macd-link/  Chainlink — MACD
+  /charts/macd-ltc/  Litecoin — MACD
+  /charts/macd-pol/  Polygon — MACD
+  /charts/macd-silver/  Silver — MACD
+  /charts/macd-sol/  Solana — MACD
+  /charts/macd-spx/  S&P 500 — MACD
+  /charts/macd-xrp/  XRP — MACD
+  /charts/macross-btc/  Bitcoin — Golden and Death Crosses
+  /charts/mayer-btc/  Bitcoin — Mayer Multiple
+  /charts/mayer-multiple-ada/  Cardano — Mayer Multiple
+  /charts/mayer-multiple-avax/  Avalanche — Mayer Multiple
+  /charts/mayer-multiple-bch/  Bitcoin Cash — Mayer Multiple
+  /charts/mayer-multiple-dot/  Polkadot — Mayer Multiple
+  /charts/mayer-multiple-eth/  Ethereum — Mayer Multiple
+  /charts/mayer-multiple-gold/  Gold — Mayer Multiple
+  /charts/mayer-multiple-link/  Chainlink — Mayer Multiple
+  /charts/mayer-multiple-ltc/  Litecoin — Mayer Multiple
+  /charts/mayer-multiple-pol/  Polygon — Mayer Multiple
+  /charts/mayer-multiple-silver/  Silver — Mayer Multiple
+  /charts/mayer-multiple-sol/  Solana — Mayer Multiple
+  /charts/mayer-multiple-spx/  S&P 500 — Mayer Multiple
+  /charts/mayer-multiple-xrp/  XRP — Mayer Multiple
+  /charts/moving-averages-ada/  Cardano — Long Term Moving Averages
+  /charts/moving-averages-avax/  Avalanche — Long Term Moving Averages
+  /charts/moving-averages-bch/  Bitcoin Cash — Long Term Moving Averages
+  /charts/moving-averages-dot/  Polkadot — Long Term Moving Averages
+  /charts/moving-averages-eth/  Ethereum — Long Term Moving Averages
+  /charts/moving-averages-gold/  Gold — Long Term Moving Averages
+  /charts/moving-averages-link/  Chainlink — Long Term Moving Averages
+  /charts/moving-averages-ltc/  Litecoin — Long Term Moving Averages
+  /charts/moving-averages-pol/  Polygon — Long Term Moving Averages
+  /charts/moving-averages-silver/  Silver — Long Term Moving Averages
+  /charts/moving-averages-sol/  Solana — Long Term Moving Averages
+  /charts/moving-averages-spx/  S&P 500 — Long Term Moving Averages
+  /charts/moving-averages-xrp/  XRP — Long Term Moving Averages
+  /charts/pi-cycle-ada/  Cardano — Pi Cycle Top
+  /charts/pi-cycle-avax/  Avalanche — Pi Cycle Top
+  /charts/pi-cycle-bch/  Bitcoin Cash — Pi Cycle Top
+  /charts/pi-cycle-dot/  Polkadot — Pi Cycle Top
+  /charts/pi-cycle-eth/  Ethereum — Pi Cycle Top
+  /charts/pi-cycle-link/  Chainlink — Pi Cycle Top
+  /charts/pi-cycle-ltc/  Litecoin — Pi Cycle Top
+  /charts/pi-cycle-pol/  Polygon — Pi Cycle Top
+  /charts/pi-cycle-sol/  Solana — Pi Cycle Top
+  /charts/pi-cycle-xrp/  XRP — Pi Cycle Top
+  /charts/picycle-btc/  Bitcoin — Pi Cycle Top
+  /charts/realised-volatility-ada/  Cardano — Realised Volatility
+  /charts/realised-volatility-avax/  Avalanche — Realised Volatility
+  /charts/realised-volatility-bch/  Bitcoin Cash — Realised Volatility
+  /charts/realised-volatility-dot/  Polkadot — Realised Volatility
+  /charts/realised-volatility-eth/  Ethereum — Realised Volatility
+  /charts/realised-volatility-gold/  Gold — Realised Volatility
+  /charts/realised-volatility-link/  Chainlink — Realised Volatility
+  /charts/realised-volatility-ltc/  Litecoin — Realised Volatility
+  /charts/realised-volatility-pol/  Polygon — Realised Volatility
+  /charts/realised-volatility-silver/  Silver — Realised Volatility
+  /charts/realised-volatility-sol/  Solana — Realised Volatility
+  /charts/realised-volatility-spx/  S&P 500 — Realised Volatility
+  /charts/realised-volatility-xrp/  XRP — Realised Volatility
+  /charts/realisedvol-btc/  Bitcoin — Realised Volatility
+  /charts/ribbon-btc/  Bitcoin — Moving Average Ribbon
+  /charts/rsi-ada/  Cardano — Relative Strength Index (14d)
+  /charts/rsi-avax/  Avalanche — Relative Strength Index (14d)
+  /charts/rsi-bch/  Bitcoin Cash — Relative Strength Index (14d)
+  /charts/rsi-btc/  Bitcoin — Relative Strength Index (14d)
+  /charts/rsi-dot/  Polkadot — Relative Strength Index (14d)
+  /charts/rsi-eth/  Ethereum — Relative Strength Index (14d)
+  /charts/rsi-gold/  Gold — Relative Strength Index (14d)
+  /charts/rsi-link/  Chainlink — Relative Strength Index (14d)
+  /charts/rsi-ltc/  Litecoin — Relative Strength Index (14d)
+  /charts/rsi-pol/  Polygon — Relative Strength Index (14d)
+  /charts/rsi-silver/  Silver — Relative Strength Index (14d)
+  /charts/rsi-sol/  Solana — Relative Strength Index (14d)
+  /charts/rsi-spx/  S&P 500 — Relative Strength Index (14d)
+  /charts/rsi-xrp/  XRP — Relative Strength Index (14d)
+  /charts/support-band-ada/  Cardano — Bull Market Support Band
+  /charts/support-band-avax/  Avalanche — Bull Market Support Band
+  /charts/support-band-bch/  Bitcoin Cash — Bull Market Support Band
+  /charts/support-band-dot/  Polkadot — Bull Market Support Band
+  /charts/support-band-eth/  Ethereum — Bull Market Support Band
+  /charts/support-band-gold/  Gold — Bull Market Support Band
+  /charts/support-band-link/  Chainlink — Bull Market Support Band
+  /charts/support-band-ltc/  Litecoin — Bull Market Support Band
+  /charts/support-band-pol/  Polygon — Bull Market Support Band
+  /charts/support-band-silver/  Silver — Bull Market Support Band
+  /charts/support-band-sol/  Solana — Bull Market Support Band
+  /charts/support-band-spx/  S&P 500 — Bull Market Support Band
+  /charts/support-band-xrp/  XRP — Bull Market Support Band
+
+
+------------------------------------------------------------------------
+## uma — uma-v1
+
+UMA's DVM: who settles disputes, with what stake, which way, and when slashed.
+
+Module:   src/resolution/uma.py
+Charts:   0
+Restated: no
+
+### Version history
+
+  uma-v1  2026-08-06  [initial]
+      VotingV2 reveals, slashing and resolutions read straight from mainnet logs. Replaces the subgraph route entirely.
+
+
+------------------------------------------------------------------------
+## val — val-v1
+
+Valuation multiples and the asymmetric regression fan — Zone 5 category 2.
+
+Module:   src/metrics/valuation.py
+Charts:   44
+Restated: no
+
+### Version history
+
+  val-v1  2026-08-05  [initial]
+      golden ratio multiplier, two-year multiplier, expanding multiple percentiles, asymmetric quantile fan.
+
+### Charts
+
+  /charts/fan-btc/  Bitcoin — Asymmetric Quantile Fan
+  /charts/golden-ratio-ada/  Cardano — Golden Ratio Multiplier
+  /charts/golden-ratio-avax/  Avalanche — Golden Ratio Multiplier
+  /charts/golden-ratio-bch/  Bitcoin Cash — Golden Ratio Multiplier
+  /charts/golden-ratio-dot/  Polkadot — Golden Ratio Multiplier
+  /charts/golden-ratio-eth/  Ethereum — Golden Ratio Multiplier
+  /charts/golden-ratio-link/  Chainlink — Golden Ratio Multiplier
+  /charts/golden-ratio-ltc/  Litecoin — Golden Ratio Multiplier
+  /charts/golden-ratio-pol/  Polygon — Golden Ratio Multiplier
+  /charts/golden-ratio-sol/  Solana — Golden Ratio Multiplier
+  /charts/golden-ratio-xrp/  XRP — Golden Ratio Multiplier
+  /charts/goldenratio-btc/  Bitcoin — Golden Ratio Multiplier
+  /charts/logreg-oscillator-ada/  Cardano — Distance from Log Regression
+  /charts/logreg-oscillator-avax/  Avalanche — Distance from Log Regression
+  /charts/logreg-oscillator-bch/  Bitcoin Cash — Distance from Log Regression
+  /charts/logreg-oscillator-dot/  Polkadot — Distance from Log Regression
+  /charts/logreg-oscillator-eth/  Ethereum — Distance from Log Regression
+  /charts/logreg-oscillator-link/  Chainlink — Distance from Log Regression
+  /charts/logreg-oscillator-ltc/  Litecoin — Distance from Log Regression
+  /charts/logreg-oscillator-pol/  Polygon — Distance from Log Regression
+  /charts/logreg-oscillator-sol/  Solana — Distance from Log Regression
+  /charts/logreg-oscillator-xrp/  XRP — Distance from Log Regression
+  /charts/logregosc-btc/  Bitcoin — Distance from Log Regression
+  /charts/quantile-fan-ada/  Cardano — Asymmetric Quantile Fan
+  /charts/quantile-fan-avax/  Avalanche — Asymmetric Quantile Fan
+  /charts/quantile-fan-bch/  Bitcoin Cash — Asymmetric Quantile Fan
+  /charts/quantile-fan-dot/  Polkadot — Asymmetric Quantile Fan
+  /charts/quantile-fan-eth/  Ethereum — Asymmetric Quantile Fan
+  /charts/quantile-fan-link/  Chainlink — Asymmetric Quantile Fan
+  /charts/quantile-fan-ltc/  Litecoin — Asymmetric Quantile Fan
+  /charts/quantile-fan-pol/  Polygon — Asymmetric Quantile Fan
+  /charts/quantile-fan-sol/  Solana — Asymmetric Quantile Fan
+  /charts/quantile-fan-xrp/  XRP — Asymmetric Quantile Fan
+  /charts/two-year-multiplier-ada/  Cardano — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-avax/  Avalanche — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-bch/  Bitcoin Cash — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-dot/  Polkadot — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-eth/  Ethereum — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-link/  Chainlink — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-ltc/  Litecoin — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-pol/  Polygon — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-sol/  Solana — Two-Year Moving Average Multiplier
+  /charts/two-year-multiplier-xrp/  XRP — Two-Year Moving Average Multiplier
+  /charts/twoyear-btc/  Bitcoin — Two-Year Moving Average Multiplier
+
+
+------------------------------------------------------------------------
+## verify — verify-v1
+
+Phase 4 step 3, stage two — LLM verification of candidate links.
+
+Module:   src/resolution/verify.py
+Charts:   0
+Restated: no
+
+### Version history
+
+  verify-v1  2026-08-05  [initial]
+      xAI chat-completions, JSON verdicts, resumable cache.
+
